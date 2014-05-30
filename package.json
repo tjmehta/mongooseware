@@ -1,0 +1,40 @@
+{
+  "name": "mongooseware",
+  "version": "0.0.0",
+  "description": "Magical mongoose middleware works great with dat-middleware",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "lab -c test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tjmehta/mongooseware"
+  },
+  "keywords": [
+    "mongoose",
+    "middleware",
+    "mongoose",
+    "express",
+    "mongoose",
+    "express",
+    "mongoose",
+    "models",
+    "middleware",
+    "models"
+  ],
+  "author": "Tejesh Mehta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tjmehta/mongooseware/issues"
+  },
+  "homepage": "https://github.com/tjmehta/mongooseware",
+  "devDependencies": {
+    "express": "^4.3.2",
+    "nodemon": "^1.1.1",
+    "lab": "^3.2.1",
+    "mongoose": "^3.8.11"
+  }
+}
