@@ -1,0 +1,42 @@
+{
+  "name": "mongooseware",
+  "version": "0.0.0",
+  "description": "magical mongoose middleware for express",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test-watch": "nodemon --exec npm test",
+    "test": "clear && lab -v ./test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tjmehta/mongooseware.git"
+  },
+  "keywords": [
+    "mongoose",
+    "mongodb",
+    "express",
+    "middleware"
+  ],
+  "author": "Tejesh Mehta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tjmehta/mongooseware/issues"
+  },
+  "homepage": "https://github.com/tjmehta/mongooseware",
+  "devDependencies": {
+    "body-parser": "^1.4.3",
+    "dat-middleware": "^1.6.0",
+    "express": "^4.4.3",
+    "lab": "^3.2.1",
+    "mongoose": "^3.8.12",
+    "nodemon": "^1.2.0"
+  },
+  "dependencies": {
+    "101": "^0.5.0",
+    "i": "^0.3.2",
+    "keypather": "^1.7.0"
+  }
+}
