@@ -11,6 +11,7 @@ var User = require('./fixtures/user-model');
 var createAppWithMiddleware = require('./fixtures/create-app-with-middlewares');
 var request = require('supertest');
 var pluck = require('101/pluck');
+var exists = require('101/exists');
 var mw = require('dat-middleware');
 
 describe('model static methods', function () {
@@ -41,8 +42,8 @@ describe('model static methods', function () {
 
 function asyncMethodTests (ctx, opts) {
   return function () {
-    describe('findOne', function() {
-      it('findOne should set documents to the model key', function (done) {
+    describe('findOne', function () {
+      it('should set documents to the model key', function (done) {
         var users = createMongooseware(User);
         var query = { name: 'user1' };
         var queryMiddleware = opts.useExec ?
@@ -67,8 +68,8 @@ function asyncMethodTests (ctx, opts) {
       });
 
     });
-    describe('find', function() {
-      it('find should set documents to the collection key', function (done) {
+    describe('find', function () {
+      it('should set documents to the collection key', function (done) {
         var users = createMongooseware(User);
         var queryMiddleware = opts.useExec ?
           users.find().exec(opts.keyOverride) :
@@ -93,9 +94,35 @@ function asyncMethodTests (ctx, opts) {
           });
       });
     });
-    describe('chain', function() {
-      describe('find and limit', function() {
-        it('should find documents and limit the results', function(done) {
+    describe('create', function () {
+      after(function (done) {
+        ctx = {};
+        User.remove({ name: 'yolo' }, done);
+      });
+      it('should create a document', function (done) {
+        var users = createMongooseware(User);
+        var app = createAppWithMiddleware(
+          users.create({ name: 'body.name' }),
+          mw.res.send(201, 'user')
+        );
+        var body = { name: 'yolo' };
+        request(app)
+          .post('/')
+          .send(body)
+          .expect(201)
+          .end(function (err, res) {
+            if (err) { return done(err); }
+
+            expect(res.body).to.be.an('object');
+            expect(res.body._id).to.satisfy(exists);
+            expect(res.body.name).to.eql(body.name);
+            done();
+          });
+      });
+    });
+    describe('chain', function () {
+      describe('find and limit', function () {
+        it('should find documents and limit the results', function (done) {
           var users = createMongooseware(User);
           var limit = 1;
           var queryMiddleware = opts.useExec ?
