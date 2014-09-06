@@ -1,10 +1,11 @@
 var Lab = require('lab');
-var describe = Lab.experiment;
-var it = Lab.test;
-var before = Lab.before;
-var after = Lab.after;
-var beforeEach = Lab.beforeEach;
-var afterEach = Lab.afterEach;
+var lab = exports.lab = Lab.script();
+var describe = lab.describe;
+var it = lab.it;
+var before = lab.before;
+var after = lab.after;
+var beforeEach = lab.beforeEach;
+var afterEach = lab.afterEach;
 var expect = Lab.expect;
 var createModelMiddlewareClass = require('../lib/middleware-class-factories/model');
 var User = require('./fixtures/user-model');

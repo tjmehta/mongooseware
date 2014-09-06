@@ -12,7 +12,7 @@ module.exports = function createAppWithMiddlewares (/* middlewares */) {
   middlewares.forEach(function (middleware) {
     app.all('*', middleware);
   });
-  app.use(mw.errorHandler());
+  app.use(mw.errorHandler({log:false}));
 
   return app;
 };

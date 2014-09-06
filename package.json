@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test-watch": "nodemon --exec npm test",
-    "test": "clear && lab -v ./test/*.js"
+    "test": "clear && lab -v -c ./test/*.js"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "body-parser": "^1.4.3",
     "dat-middleware": "^1.6.0",
     "express": "^4.4.3",
-    "lab": "^3.2.1",
+    "lab": "^4.3.0",
     "mongoose": "^3.8.12",
     "nodemon": "^1.2.0",
     "supertest": "^0.13.0"

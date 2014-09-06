@@ -1,10 +1,11 @@
 var Lab = require('lab');
-var describe = Lab.experiment;
-var it = Lab.test;
-var before = Lab.before;
-var after = Lab.after;
-var beforeEach = Lab.beforeEach;
-var afterEach = Lab.afterEach;
+var lab = exports.lab = Lab.script();
+var describe = lab.describe;
+var it = lab.it;
+var before = lab.before;
+var after = lab.after;
+var beforeEach = lab.beforeEach;
+var afterEach = lab.afterEach;
 var expect = Lab.expect;
 var createMongooseware = require('../index');
 var User = require('./fixtures/user-model');
@@ -37,6 +38,65 @@ describe('model static methods', function () {
     asyncMethodTests(ctx, { useExec: true }));
   describe('async methods (with .exec("custom"))',
     asyncMethodTests(ctx, { useExec: true, keyOverride: 'custom' }));
+  describe('new', function () {
+    it('should create a model instance', function (done) {
+      var users = createMongooseware(User);
+      var userInfo = { name: 'yolo' };
+      var app = createAppWithMiddleware(
+        users.new(userInfo),
+        users.model().save(),
+        mw.res.json(201, 'user')
+      );
+
+      request(app)
+        .get('/')
+        .expect(201)
+        .end(function (err, res) {
+          console.log(res.body);
+          if (err) { return done(err); }
+          expect(res.body.name).to.eql(userInfo.name);
+          done();
+        });
+    });
+    describe('error', function () {
+      it('should create a model instance', function (done) {
+        var users = createMongooseware(User);
+        var userInfo = { name: 'yolo' };
+
+        try {
+          var app = createAppWithMiddleware(
+            users.find().new(userInfo),
+            users.model().save(),
+            mw.res.json(201, 'user')
+          );
+        }
+        catch (err) {
+          // new cannot be chained
+          expect(err).to.be.ok;
+        }
+        done();
+      });
+    });
+  });
+  describe('error', function () {
+    it('should find documents and limit the results with custom static method', function (done) {
+      var users = createMongooseware(User);
+
+      var app = createAppWithMiddleware(
+        users.callbackError(),
+        mw.res.send('user')
+      );
+
+      request(app)
+        .get('/')
+        .expect(500)
+        .end(function (err, res) {
+          if (err) { return done(err); }
+          expect(res.body).to.eql({message:'boom'});
+          done();
+        });
+    });
+  });
 });
 
 
@@ -128,6 +188,33 @@ function asyncMethodTests (ctx, opts) {
           var queryMiddleware = opts.useExec ?
             users.find().limit(1).exec(opts.keyOverride) :
             users.find().limit(1);
+
+          var app = createAppWithMiddleware(
+            queryMiddleware,
+            mw.res.send(opts.keyOverride || 'users')
+          );
+
+          request(app)
+            .get('/')
+            .expect(200)
+            .end(function (err, res) {
+              if (err) { return done(err); }
+
+              expect(res.body).to.be.an('array');
+              expect(res.body).to.have.a.lengthOf(limit);
+              done();
+            });
+        });
+      });
+    });
+    describe('chain', function () {
+      describe('find and limit', function () {
+        it('should find documents and limit the results with custom static method', function (done) {
+          var users = createMongooseware(User);
+          var limit = 1;
+          var queryMiddleware = opts.useExec ?
+            users.customFind().limit(1).exec(opts.keyOverride) :
+            users.customFind().limit(1);
 
           var app = createAppWithMiddleware(
             queryMiddleware,

@@ -21,6 +21,12 @@ function createMongooseware (Model, key) {
     };
   });
 
+  classMiddlewareFactoryMethods.new = function () {
+    var modelMiddleware = new ModelMiddleware();
+
+    return modelMiddleware['new'].apply(modelMiddleware, arguments);
+  };
+
   classMiddlewareFactoryMethods.model = instanceMiddlewareFactory;
 
   function instanceMiddlewareFactory (keyOverride) {
