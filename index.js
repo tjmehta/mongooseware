@@ -27,7 +27,21 @@ function createMongooseware (Model, key) {
     return modelMiddleware['new'].apply(modelMiddleware, arguments);
   };
 
-  classMiddlewareFactoryMethods.model = instanceMiddlewareFactory;
+  var defaultInstanceMiddleware = instanceMiddlewareFactory(key);
+
+  classMiddlewareFactoryMethods.model = function (key) {
+    if (arguments.length === 3) { // use default instancem middleware constructor
+      var req  = arguments[0];
+      var res  = arguments[1];
+      var next = arguments[2];
+      return defaultInstanceMiddleware(req, res, next);
+    }
+    else { // instance middleware factory
+      return instanceMiddlewareFactory(key);
+    }
+  };
+
+  classMiddlewareFactoryMethods.model.__proto__ = defaultInstanceMiddleware;
 
   function instanceMiddlewareFactory (keyOverride) {
     var instanceMiddleware = new InstanceMiddleware();

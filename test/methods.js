@@ -87,26 +87,46 @@ describe('model instance methods', function () {
         });
     });
   });
-  // describe('query methods errors', function () {
-  //   it('should find documents and limit the results with custom static method', function (done) {
-  //     var users = createMongooseware(User);
+  describe('error (model no parens)', function () {
+    it('should find documents and limit the results with custom static method', function (done) {
+      var users = createMongooseware(User);
 
-  //     var app = createAppWithMiddleware(
-  //       users.findOne({}),
-  //       users.model().limit(),
-  //       mw.res.send('user')
-  //     );
+      var app = createAppWithMiddleware(
+        users.findOne({}),
+        users.model.callbackError(),
+        mw.res.send('user')
+      );
 
-  //     request(app)
-  //       .get('/')
-  //       .expect(500)
-  //       .end(function (err, res) {
-  //         if (err) { return done(err); }
-  //         expect(res.body).to.eql({message:'boom'});
-  //         done();
-  //       });
-  //   });
-  // });
+      request(app)
+        .get('/')
+        .expect(500)
+        .end(function (err, res) {
+          if (err) { return done(err); }
+          expect(res.body).to.eql({message:'boom'});
+          done();
+        });
+    });
+  });
+  describe('error', function () {
+    it('should find documents and limit the results with custom static method', function (done) {
+      var users = createMongooseware(User);
+
+      var app = createAppWithMiddleware(
+        users.findOne({}),
+        users.model().syncError().sync(),
+        mw.res.send('user')
+      );
+
+      request(app)
+        .get('/')
+        .expect(500)
+        .end(function (err, res) {
+          if (err) { return done(err); }
+          expect(res.body).to.eql({message:'boom'});
+          done();
+        });
+    });
+  });
 });
 
 function syncMethodTests (opts) {

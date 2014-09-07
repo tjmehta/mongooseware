@@ -52,7 +52,6 @@ describe('model static methods', function () {
         .get('/')
         .expect(201)
         .end(function (err, res) {
-          console.log(res.body);
           if (err) { return done(err); }
           expect(res.body.name).to.eql(userInfo.name);
           done();
