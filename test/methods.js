@@ -107,22 +107,67 @@ describe('model instance methods', function () {
         });
     });
   });
-  describe('error', function () {
-    it('should find documents and limit the results with custom static method', function (done) {
+  describe('collection', function () {
+    it('should find documents and async forEach each model.method', function (done) {
       var users = createMongooseware(User);
 
       var app = createAppWithMiddleware(
-        users.findOne({}),
-        users.model().syncError().sync(),
-        mw.res.send('user')
+        users.find(),
+        users.collection().set('lastName', 'bar'),
+        mw.res.send('users')
       );
 
       request(app)
         .get('/')
-        .expect(500)
+        .expect(200)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body).to.eql({message:'boom'});
+          expect(res.body).to.be.an('array');
+          res.body.forEach(function (user) {
+            expect(user.lastName).to.eql('bar');
+          });
+          done();
+        });
+    });
+    it('should find documents and async forEach each model.method (specify key)', function (done) {
+      var users = createMongooseware(User);
+
+      var app = createAppWithMiddleware(
+        users.find(),
+        users.collection().set('lastName', 'bar').exec('humans'),
+        mw.res.send('humans')
+      );
+
+      request(app)
+        .get('/')
+        .expect(200)
+        .end(function (err, res) {
+          if (err) { return done(err); }
+          expect(res.body).to.be.an('array');
+          res.body.forEach(function (user) {
+            expect(user.lastName).to.equal('bar');
+          });
+          done();
+        });
+    });
+    it('should find documents and async forEach each model.method (collection without parens)', function (done) {
+      var users = createMongooseware(User);
+
+      var app = createAppWithMiddleware(
+        users.find(),
+        users.collection.set('lastName', 'bar'),
+        mw.res.send('users')
+      );
+
+      request(app)
+        .get('/')
+        .expect(200)
+        .end(function (err, res) {
+          if (err) { return done(err); }
+          expect(res.body).to.be.an('array');
+          res.body.forEach(function (user) {
+            expect(user.lastName).to.eql('bar');
+          });
           done();
         });
     });

@@ -28,7 +28,6 @@
   "homepage": "https://github.com/tjmehta/mongooseware",
   "devDependencies": {
     "body-parser": "^1.4.3",
-    "dat-middleware": "^1.6.0",
     "express": "^4.4.3",
     "lab": "^4.3.0",
     "mongoose": "^3.8.12",
@@ -37,6 +36,7 @@
   },
   "dependencies": {
     "101": "^0.5.0",
+    "dat-middleware": "^1.9.0",
     "i": "^0.3.2",
     "keypather": "^1.7.0"
   }

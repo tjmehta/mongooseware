@@ -1,7 +1,8 @@
 var i = require('i')();
 var isObject = require('101/is-object');
 var createModelMiddlewareClass = require('./lib/middleware-class-factories/model');
-var createInstanceMiddleware = require('./lib/middleware-class-factories/instance');
+var createInstanceMiddlewareClass = require('./lib/middleware-class-factories/instance');
+var createCollectionMiddlewareClass = require('./lib/middleware-class-factories/collection');
 var listClassMethods = require('./lib/method-lists/list-class-methods');
 
 module.exports = createMongooseware;
@@ -9,7 +10,8 @@ module.exports = createMongooseware;
 function createMongooseware (Model, key) {
   var classMiddlewareFactoryMethods = {};
   var ModelMiddleware = createModelMiddlewareClass(Model, key);
-  var InstanceMiddleware = createInstanceMiddleware(Model, key);
+  var InstanceMiddleware = createInstanceMiddlewareClass(Model, key);
+  var CollectionMiddleware = createCollectionMiddlewareClass(Model, key, instanceMiddlewareFactory);
 
   listClassMethods(Model).forEach(function (method) {
     classMiddlewareFactoryMethods[method] = function () {
@@ -27,21 +29,31 @@ function createMongooseware (Model, key) {
     return modelMiddleware['new'].apply(modelMiddleware, arguments);
   };
 
-  var defaultInstanceMiddleware = instanceMiddlewareFactory(key);
+  // model middleware
+  //
+  Object.defineProperty(
+    classMiddlewareFactoryMethods,
+    'model', {
+    get: function () {
+      var defaultInstanceMiddleware = instanceMiddlewareFactory(key);
 
-  classMiddlewareFactoryMethods.model = function (key) {
-    if (arguments.length === 3) { // use default instancem middleware constructor
-      var req  = arguments[0];
-      var res  = arguments[1];
-      var next = arguments[2];
-      return defaultInstanceMiddleware(req, res, next);
-    }
-    else { // instance middleware factory
-      return instanceMiddlewareFactory(key);
-    }
-  };
+      function model (key) {
+        if (arguments.length === 3) { // use default instance middleware constructor
+          var req  = arguments[0];
+          var res  = arguments[1];
+          var next = arguments[2];
+          return defaultInstanceMiddleware(req, res, next);
+        }
+        else { // instance middleware factory
+          return instanceMiddlewareFactory(key);
+        }
+      }
 
-  classMiddlewareFactoryMethods.model.__proto__ = defaultInstanceMiddleware;
+      model.__proto__ = defaultInstanceMiddleware;
+
+      return model;
+    }
+  });
 
   function instanceMiddlewareFactory (keyOverride) {
     var instanceMiddleware = new InstanceMiddleware();
@@ -51,10 +63,44 @@ function createMongooseware (Model, key) {
     return instanceMiddleware;
   }
 
-  // classMiddlewareFactoryMethods.collection = function (keyOverride) {
-  //   var modelInstanceMiddleware = createModelInstanceMiddleware(Model, keyOverride || key);
-  //   return modelInstanceMiddleware;
-  // };
+  // collection middleware
+
+  Object.defineProperty(
+    classMiddlewareFactoryMethods,
+    'collection', {
+    get: function () {
+      var defaultInstanceMiddleware = instanceMiddlewareFactory(key);
+      var defaultCollectionMiddleware = collectionMiddlewareFactory(defaultInstanceMiddleware.collectionKey);
+
+      function collection (key) {
+        if (arguments.length === 3) { // use default instance middleware constructor
+          var req  = arguments[0];
+          var res  = arguments[1];
+          var next = arguments[2];
+          return defaultCollectionMiddleware(req, res, next);
+        }
+        else { // instance middleware factory
+          return collectionMiddlewareFactory(key);
+        }
+      }
+
+      collection.__proto__ = defaultCollectionMiddleware;
+
+      return collection;
+    }
+  });
+
+
+
+  function collectionMiddlewareFactory (keyOverride) {
+    var collectionMiddleware = new CollectionMiddleware();
+    if (keyOverride) {
+      collectionMiddleware.setKey(keyOverride);
+    }
+    return collectionMiddleware;
+  }
+
+  classMiddlewareFactoryMethods.models = classMiddlewareFactoryMethods.collection;
 
   return classMiddlewareFactoryMethods;
 }
