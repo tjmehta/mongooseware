@@ -31,7 +31,9 @@ app.get('blogs',
 app.get('blogs/:blogId',
   blogs.findOne({ _id: 'params.blogId' }),
   mw.req('blog').require()
-    .else(mw.res.next(mw.Boom.notFound('Blog not found'))),
+    .else(
+      mw.res.next(mw.Boom.notFound('Blog not found'))
+    ),
   mw.res.send('blog'));
 ```
 
@@ -45,7 +47,9 @@ var app = require('express')();
 app.patch('blogs/:blogId',
   blogs.findOne({ _id: 'params.blogId' }),
   mw.req('blog').require()
-    .else(mw.Boom.notFound('Blog not found')),
+    .else(
+      mw.res.next(mw.Boom.notFound('Blog not found'))
+    ),
   mw.body('name').require().string().pick(),
   blogs.model.update({
     $set: 'body'
