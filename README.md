@@ -1,7 +1,7 @@
 mongooseware
 ============
 
-Magic mongoose middleware for express [![Build Status](https://travis-ci.org/tjmehta/mongooseware.png?branch=master)](https://travis-ci.org/tjmehta/mongooseware)
+Magic mongoose middleware for express [![Build Status](https://travis-ci.org/tjmehta/mongooseware.png?branch=master)](https://travis-ci.org/tjmehta/mongooseware)  
 Works great with [tjmehta/dat-middleware](https://github.com/tjmehta/dat-middleware)
 
 # Installation
@@ -31,7 +31,7 @@ app.get('blogs',
 app.get('blogs/:blogId',
   blogs.findOne({ _id: 'params.blogId' }),
   mw.req('blog').require()
-    .else(mw.Boom.notFound('Blog not found')),
+    .else(mw.res.next(mw.Boom.notFound('Blog not found'))),
   mw.res.send('blog'));
 ```
 
