@@ -11,6 +11,10 @@ UserSchema.statics.customFind = function () {
   return this.find.apply(this, arguments);
 };
 
+UserSchema.statics.customFindNoChain = function () {
+  this.find.apply(this, arguments);
+};
+
 UserSchema.statics.callbackError = function (cb) {
   cb(new Error('boom'));
 };

@@ -172,6 +172,51 @@ function asyncMethodTests (ctx, opts) {
         });
       });
     });
+    describe('customFindNoChain', function() {
+      before(function (done) {
+        var users = createMongooseware(User);
+        var queryMiddleware = opts.useExec ?
+          users.customFindNoChain().exec(opts.keyOverride) :
+          users.customFindNoChain();
+        ctx.app = createAppWithMiddleware(
+          queryMiddleware,
+          mw.res.send(opts.keyOverride || 'users')
+        );
+        done();
+      });
+      it('should set documents to the collection key', function (done) {
+        var app = ctx.app;
+        request(app)
+          .get('/')
+          .expect(200)
+          .end(function (err, res) {
+            if (err) { return done(err); }
+
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.have.a.lengthOf(ctx.users.length);
+            expect(res.body.map(pluck('name')))
+              .to.eql(ctx.users.map(pluck('name')));
+            done();
+          });
+      });
+      describe('reuse', function () {
+        it('should set documents to the collection key', function (done) {
+          var app = ctx.app;
+          request(app)
+            .get('/')
+            .expect(200)
+            .end(function (err, res) {
+              if (err) { return done(err); }
+
+              expect(res.body).to.be.an('array');
+              expect(res.body).to.have.a.lengthOf(ctx.users.length);
+              expect(res.body.map(pluck('name')))
+                .to.eql(ctx.users.map(pluck('name')));
+              done();
+            });
+        });
+      });
+    });
     describe('create', function () {
       after(function (done) {
         ctx = {};
