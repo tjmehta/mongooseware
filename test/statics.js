@@ -128,17 +128,19 @@ function asyncMethodTests (ctx, opts) {
 
     });
     describe('find', function () {
-      it('should set documents to the collection key', function (done) {
+      before(function (done) {
         var users = createMongooseware(User);
         var queryMiddleware = opts.useExec ?
           users.find().exec(opts.keyOverride) :
           users.find();
-
-        var app = createAppWithMiddleware(
+        ctx.app = createAppWithMiddleware(
           queryMiddleware,
           mw.res.send(opts.keyOverride || 'users')
         );
-
+        done();
+      });
+      it('should set documents to the collection key', function (done) {
+        var app = ctx.app;
         request(app)
           .get('/')
           .expect(200)
@@ -151,6 +153,23 @@ function asyncMethodTests (ctx, opts) {
               .to.eql(ctx.users.map(pluck('name')));
             done();
           });
+      });
+      describe('reuse', function () {
+        it('should set documents to the collection key', function (done) {
+          var app = ctx.app;
+          request(app)
+            .get('/')
+            .expect(200)
+            .end(function (err, res) {
+              if (err) { return done(err); }
+
+              expect(res.body).to.be.an('array');
+              expect(res.body).to.have.a.lengthOf(ctx.users.length);
+              expect(res.body.map(pluck('name')))
+                .to.eql(ctx.users.map(pluck('name')));
+              done();
+            });
+        });
       });
     });
     describe('create', function () {
@@ -208,18 +227,21 @@ function asyncMethodTests (ctx, opts) {
     });
     describe('chain', function () {
       describe('find and limit', function () {
-        it('should find documents and limit the results with custom static method', function (done) {
+        before(function (done) {
           var users = createMongooseware(User);
-          var limit = 1;
+          ctx.limit = 1;
           var queryMiddleware = opts.useExec ?
-            users.customFind().limit(1).exec(opts.keyOverride) :
-            users.customFind().limit(1);
+            users.customFind().limit(ctx.limit).exec(opts.keyOverride) :
+            users.customFind().limit(ctx.limit);
 
-          var app = createAppWithMiddleware(
+          ctx.app = createAppWithMiddleware(
             queryMiddleware,
             mw.res.send(opts.keyOverride || 'users')
           );
-
+          done();
+        });
+        it('should find documents and limit the results with custom static method', function (done) {
+          var app = ctx.app;
           request(app)
             .get('/')
             .expect(200)
@@ -227,9 +249,24 @@ function asyncMethodTests (ctx, opts) {
               if (err) { return done(err); }
 
               expect(res.body).to.be.an('array');
-              expect(res.body).to.have.a.lengthOf(limit);
+              expect(res.body).to.have.a.lengthOf(ctx.limit);
               done();
             });
+        });
+        describe('reuse', function() {
+          it('should find documents and limit the results with custom static method', function (done) {
+            var app = ctx.app;
+            request(app)
+              .get('/')
+              .expect(200)
+              .end(function (err, res) {
+                if (err) { return done(err); }
+
+                expect(res.body).to.be.an('array');
+                expect(res.body).to.have.a.lengthOf(ctx.limit);
+                done();
+              });
+          });
         });
       });
     });
