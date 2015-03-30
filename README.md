@@ -18,7 +18,7 @@ npm install mongooseware
 
 # Examples
 
-## Model class methods
+- Model class methods
 ```js
 var mw = require('dat-middleware');
 var BlogModel = require('mongoose').model('blogs', BlogSchema);
@@ -44,7 +44,7 @@ app.get('blogs/:blogId',
   mw.res.send('blog'));
 ```
 
-## Model instance methods
+- Model instance methods
 ```js
 var mw = require('dat-middleware');
 var BlogModel = require('mongoose').model('blogs', BlogSchema);
