@@ -1,12 +1,24 @@
+/**
+ * TODO: description
+ * @module index
+ */
+'use strict';
+
 var i = require('i')();
 var isObject = require('101/is-object');
-var createModelMiddlewareClass = require('./lib/middleware-class-factories/model');
-var createInstanceMiddlewareClass = require('./lib/middleware-class-factories/instance');
+
 var createCollectionMiddlewareClass = require('./lib/middleware-class-factories/collection');
+var createInstanceMiddlewareClass = require('./lib/middleware-class-factories/instance');
+var createModelMiddlewareClass = require('./lib/middleware-class-factories/model');
 var listClassMethods = require('./lib/method-lists/list-class-methods');
 
 module.exports = createMongooseware;
 
+/**
+ *
+ * @param {Object} Model
+ * @param {String} key
+ */
 function createMongooseware (Model, key) {
   var classMiddlewareFactoryMethods = {};
   var ModelMiddleware = createModelMiddlewareClass(Model, key);
@@ -16,16 +28,13 @@ function createMongooseware (Model, key) {
   listClassMethods(Model).forEach(function (method) {
     classMiddlewareFactoryMethods[method] = function () {
       var modelMiddleware = new ModelMiddleware();
-
       modelMiddleware[method].apply(modelMiddleware, arguments);
-
       return modelMiddleware;
     };
   });
 
   classMiddlewareFactoryMethods.new = function () {
     var modelMiddleware = new ModelMiddleware();
-
     return modelMiddleware['new'].apply(modelMiddleware, arguments);
   };
 
@@ -89,8 +98,6 @@ function createMongooseware (Model, key) {
       return collection;
     }
   });
-
-
 
   function collectionMiddlewareFactory (keyOverride) {
     var collectionMiddleware = new CollectionMiddleware();
