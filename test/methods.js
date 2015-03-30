@@ -1,18 +1,22 @@
+'use strict';
+
 var Lab = require('lab');
-var lab = exports.lab = Lab.script();
-var describe = lab.describe;
-var it = lab.it;
-var before = lab.before;
-var after = lab.after;
-var beforeEach = lab.beforeEach;
-var afterEach = lab.afterEach;
-var expect = Lab.expect;
-var createMongooseware = require('../index');
+var mw = require('dat-middleware');
+var request = require('supertest');
+
 var User = require('./fixtures/user-model');
 var createAppWithMiddleware = require('./fixtures/create-app-with-middlewares');
-var request = require('supertest');
-var pluck = require('101/pluck');
-var mw = require('dat-middleware');
+var createMongooseware = require('../index');
+
+var lab = exports.lab = Lab.script();
+//var after = lab.after;
+var afterEach = lab.afterEach;
+var before = lab.before;
+var beforeEach = lab.beforeEach;
+var describe = lab.describe;
+var expect = Lab.expect;
+var it = lab.it;
+
 var customObj = new Custom();
 function Custom () {}
 
@@ -150,7 +154,8 @@ describe('model instance methods', function () {
           done();
         });
     });
-    it('should find documents and async forEach each model.method (collection without parens)', function (done) {
+    it('should find documents and async forEach each model.method '+
+       '(collection without parens)', function (done) {
       var users = createMongooseware(User);
 
       var app = createAppWithMiddleware(
@@ -251,7 +256,7 @@ function asyncMethodTests (opts) {
           if (err) { return done(err); }
           expect(res.body).to.be.an('object');
           expect(res.body.name).to.equal('newName');
-          expect(res.body.lastName).to.equal("1");
+          expect(res.body.lastName).to.equal('1');
           done();
         });
     });
