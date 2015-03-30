@@ -1,7 +1,14 @@
 mongooseware
 ============
+[![Build Status](https://travis-ci.org/tjmehta/mongooseware.png?branch=master)](https://travis-ci.org/tjmehta/mongooseware)
+[![Code Climate](https://codeclimate.com/github/tjmehta/mongooseware/badges/gpa.svg)](https://codeclimate.com/github/tjmehta/mongooseware)
+[![Test Coverage](https://codeclimate.com/github/tjmehta/mongooseware/badges/coverage.svg)](https://codeclimate.com/github/tjmehta/mongooseware)
+[![Dependency Status](https://david-dm.org/tjmehta/mongooseware.svg)](https://david-dm.org/tjmehta/mongooseware)
+[![devDependency Status](https://david-dm.org/tjmehta/mongooseware/dev-status.svg)](https://david-dm.org/tjmehta/mongooseware#info=devDependencies)
 
-Magic mongoose middleware for express [![Build Status](https://travis-ci.org/tjmehta/mongooseware.png?branch=master)](https://travis-ci.org/tjmehta/mongooseware)  
+[![NPM](https://nodei.co/npm/mongooseware.png?compact=true)](https://nodei.co/npm/mongooseware/)··
+
+Magic mongoose middleware for express  
 Works great with [tjmehta/dat-middleware](https://github.com/tjmehta/dat-middleware)
 
 # Installation
