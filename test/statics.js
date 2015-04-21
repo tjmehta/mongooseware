@@ -65,7 +65,7 @@ describe('model static methods', function () {
         var userInfo = { name: 'yolo' };
 
         try {
-          var app = createAppWithMiddleware(
+          createAppWithMiddleware(
             users.find().new(userInfo),
             users.model().save(),
             mw.res.json(201, 'user')

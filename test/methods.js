@@ -181,6 +181,7 @@ describe('model instance methods', function () {
 
 function syncMethodTests (opts) {
   return function () {
+    // jshint maxcomplexity:7
     it('should findOne and set a key and send a document', function (done) {
       var key = opts.keyOverride || 'user';
       var users = createMongooseware(User);
@@ -214,6 +215,7 @@ function syncMethodTests (opts) {
           done();
         });
     });
+    // jshint maxcomplexity:5
   };
 }
 
