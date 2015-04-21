@@ -6,7 +6,7 @@ var before = lab.before;
 var after = lab.after;
 var beforeEach = lab.beforeEach;
 var afterEach = lab.afterEach;
-var expect = Lab.expect;
+var expect = require('code').expect;
 var createModelMiddlewareClass = require('../lib/middleware-class-factories/model');
 var User = require('./fixtures/user-model');
 
