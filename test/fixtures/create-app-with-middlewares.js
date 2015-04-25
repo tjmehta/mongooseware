@@ -1,7 +1,8 @@
+'use strict';
+
 var express = require('express');
 var mw = require('dat-middleware');
 var parser = require('body-parser');
-var next = function (req, res, next) {next();};
 
 module.exports = function createAppWithMiddlewares (/* middlewares */) {
   var middlewares = Array.prototype.slice.call(arguments);

@@ -12,11 +12,9 @@ var createMongooseware = require('../index');
 
 var lab = exports.lab = Lab.script();
 var after = lab.after;
-//var afterEach = lab.afterEach;
 var before = lab.before;
-//var beforeEach = lab.beforeEach;
 var describe = lab.describe;
-var expect = Lab.expect;
+var expect = require('code').expect;
 var it = lab.it;
 
 describe('model static methods', function () {
@@ -57,7 +55,7 @@ describe('model static methods', function () {
         .expect(201)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body.name).to.eql(userInfo.name);
+          expect(res.body.name).to.equal(userInfo.name);
           done();
         });
     });
@@ -67,7 +65,7 @@ describe('model static methods', function () {
         var userInfo = { name: 'yolo' };
 
         try {
-          var app = createAppWithMiddleware(
+          createAppWithMiddleware(
             users.find().new(userInfo),
             users.model().save(),
             mw.res.json(201, 'user')
@@ -75,7 +73,7 @@ describe('model static methods', function () {
         }
         catch (err) {
           // new cannot be chained
-          expect(err).to.be.ok;
+          expect(err).to.exist();
         }
         done();
       });
@@ -95,7 +93,7 @@ describe('model static methods', function () {
         .expect(500)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body).to.eql({message:'boom'});
+          expect(res.body).to.deep.equal({message:'boom'});
           done();
         });
     });
@@ -124,7 +122,7 @@ function asyncMethodTests (ctx, opts) {
           .end(function (err, res) {
             if (err) { return done(err); }
 
-            expect(res.body).to.be.an('object');
+            expect(res.body).to.be.an.object();
             expect(res.body.name).to.equal(query.name);
             done();
           });
@@ -151,10 +149,10 @@ function asyncMethodTests (ctx, opts) {
           .end(function (err, res) {
             if (err) { return done(err); }
 
-            expect(res.body).to.be.an('array');
-            expect(res.body).to.have.a.lengthOf(ctx.users.length);
+            expect(res.body).to.be.an.array();
+            expect(res.body).to.have.length(ctx.users.length);
             expect(res.body.map(pluck('name')))
-              .to.eql(ctx.users.map(pluck('name')));
+              .to.deep.equal(ctx.users.map(pluck('name')));
             done();
           });
       });
@@ -167,10 +165,10 @@ function asyncMethodTests (ctx, opts) {
             .end(function (err, res) {
               if (err) { return done(err); }
 
-              expect(res.body).to.be.an('array');
-              expect(res.body).to.have.a.lengthOf(ctx.users.length);
+              expect(res.body).to.be.an.array();
+              expect(res.body).to.have.length(ctx.users.length);
               expect(res.body.map(pluck('name')))
-                .to.eql(ctx.users.map(pluck('name')));
+                .to.deep.equal(ctx.users.map(pluck('name')));
               done();
             });
         });
@@ -196,10 +194,10 @@ function asyncMethodTests (ctx, opts) {
           .end(function (err, res) {
             if (err) { return done(err); }
 
-            expect(res.body).to.be.an('array');
-            expect(res.body).to.have.a.lengthOf(ctx.users.length);
+            expect(res.body).to.be.an.array();
+            expect(res.body).to.have.length(ctx.users.length);
             expect(res.body.map(pluck('name')))
-              .to.eql(ctx.users.map(pluck('name')));
+              .to.deep.equal(ctx.users.map(pluck('name')));
             done();
           });
       });
@@ -212,10 +210,10 @@ function asyncMethodTests (ctx, opts) {
             .end(function (err, res) {
               if (err) { return done(err); }
 
-              expect(res.body).to.be.an('array');
-              expect(res.body).to.have.a.lengthOf(ctx.users.length);
+              expect(res.body).to.be.an.array();
+              expect(res.body).to.have.length(ctx.users.length);
               expect(res.body.map(pluck('name')))
-                .to.eql(ctx.users.map(pluck('name')));
+                .to.deep.equal(ctx.users.map(pluck('name')));
               done();
             });
         });
@@ -240,9 +238,9 @@ function asyncMethodTests (ctx, opts) {
           .end(function (err, res) {
             if (err) { return done(err); }
 
-            expect(res.body).to.be.an('object');
+            expect(res.body).to.be.an.object();
             expect(res.body._id).to.satisfy(exists);
-            expect(res.body.name).to.eql(body.name);
+            expect(res.body.name).to.equal(body.name);
             done();
           });
       });
@@ -267,8 +265,8 @@ function asyncMethodTests (ctx, opts) {
             .end(function (err, res) {
               if (err) { return done(err); }
 
-              expect(res.body).to.be.an('array');
-              expect(res.body).to.have.a.lengthOf(limit);
+              expect(res.body).to.be.an.array();
+              expect(res.body).to.have.length(limit);
               done();
             });
         });
@@ -298,8 +296,8 @@ function asyncMethodTests (ctx, opts) {
             .end(function (err, res) {
               if (err) { return done(err); }
 
-              expect(res.body).to.be.an('array');
-              expect(res.body).to.have.a.lengthOf(ctx.limit);
+              expect(res.body).to.be.an.array();
+              expect(res.body).to.have.length(ctx.limit);
               done();
             });
         });
@@ -313,8 +311,8 @@ function asyncMethodTests (ctx, opts) {
               .end(function (err, res) {
                 if (err) { return done(err); }
 
-                expect(res.body).to.be.an('array');
-                expect(res.body).to.have.a.lengthOf(ctx.limit);
+                expect(res.body).to.be.an.array();
+                expect(res.body).to.have.length(ctx.limit);
                 done();
               });
           });

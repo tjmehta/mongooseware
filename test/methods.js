@@ -14,7 +14,7 @@ var afterEach = lab.afterEach;
 var before = lab.before;
 var beforeEach = lab.beforeEach;
 var describe = lab.describe;
-var expect = Lab.expect;
+var expect = require('code').expect;
 var it = lab.it;
 
 var customObj = new Custom();
@@ -66,7 +66,7 @@ describe('model instance methods', function () {
         .expect(500)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body).to.eql({message:'boom'});
+          expect(res.body).to.deep.equal({message:'boom'});
           done();
         });
     });
@@ -86,7 +86,7 @@ describe('model instance methods', function () {
         .expect(500)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body).to.eql({message:'boom'});
+          expect(res.body).to.deep.equal({message:'boom'});
           done();
         });
     });
@@ -106,7 +106,7 @@ describe('model instance methods', function () {
         .expect(500)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body).to.eql({message:'boom'});
+          expect(res.body).to.deep.equal({message:'boom'});
           done();
         });
     });
@@ -126,9 +126,9 @@ describe('model instance methods', function () {
         .expect(200)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body).to.be.an('array');
+          expect(res.body).to.be.an.array();
           res.body.forEach(function (user) {
-            expect(user.lastName).to.eql('bar');
+            expect(user.lastName).to.equal('bar');
           });
           done();
         });
@@ -147,7 +147,7 @@ describe('model instance methods', function () {
         .expect(200)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body).to.be.an('array');
+          expect(res.body).to.be.an.array();
           res.body.forEach(function (user) {
             expect(user.lastName).to.equal('bar');
           });
@@ -169,9 +169,9 @@ describe('model instance methods', function () {
         .expect(200)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body).to.be.an('array');
+          expect(res.body).to.be.an.array();
           res.body.forEach(function (user) {
-            expect(user.lastName).to.eql('bar');
+            expect(user.lastName).to.equal('bar');
           });
           done();
         });
@@ -181,6 +181,7 @@ describe('model instance methods', function () {
 
 function syncMethodTests (opts) {
   return function () {
+    // jshint maxcomplexity:7
     it('should findOne and set a key and send a document', function (done) {
       var key = opts.keyOverride || 'user';
       var users = createMongooseware(User);
@@ -209,11 +210,12 @@ function syncMethodTests (opts) {
         .end(function (err, res) {
           if (err) { return done(err); }
 
-          expect(res.body).to.be.an('object');
+          expect(res.body).to.be.an.object();
           expect(res.body.name).to.equal('newName');
           done();
         });
     });
+    // jshint maxcomplexity:5
   };
 }
 
@@ -254,7 +256,7 @@ function asyncMethodTests (opts) {
         .expect(200)
         .end(function (err, res) {
           if (err) { return done(err); }
-          expect(res.body).to.be.an('object');
+          expect(res.body).to.be.an.object();
           expect(res.body.name).to.equal('newName');
           expect(res.body.lastName).to.equal('1');
           done();

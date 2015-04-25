@@ -3,9 +3,7 @@
  * @module index
  */
 'use strict';
-
-var i = require('i')();
-var isObject = require('101/is-object');
+// jshint proto:true
 
 var createCollectionMiddlewareClass = require('./lib/middleware-class-factories/collection');
 var createInstanceMiddlewareClass = require('./lib/middleware-class-factories/instance');
@@ -79,7 +77,8 @@ function createMongooseware (Model, key) {
     'collection', {
     get: function () {
       var defaultInstanceMiddleware = instanceMiddlewareFactory(key);
-      var defaultCollectionMiddleware = collectionMiddlewareFactory(defaultInstanceMiddleware.collectionKey);
+      var defaultCollectionMiddleware = 
+        collectionMiddlewareFactory(defaultInstanceMiddleware.collectionKey);
 
       function collection (key) {
         if (arguments.length === 3) { // use default instance middleware constructor

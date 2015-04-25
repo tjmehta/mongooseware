@@ -7,8 +7,9 @@
     "test": "test"
   },
   "scripts": {
+    "lint": "jshint .",
     "test-watch": "nodemon --exec npm test",
-    "test": "clear && lab -v -c ./test/*.js"
+    "test": "clear && lab -a code -v -c ./test/*.js"
   },
   "repository": {
     "type": "git",
@@ -28,14 +29,16 @@
   "homepage": "https://github.com/tjmehta/mongooseware",
   "devDependencies": {
     "body-parser": "^1.4.3",
-    "express": "^4.4.3",
-    "lab": "^4.3.0",
+    "code": "^1.4.0",
+    "express": "^4.12.3",
+    "jshint": "^2.7.0",
+    "lab": "^5.6.1",
     "mongoose": "~3.8.24",
     "nodemon": "^1.2.0",
-    "supertest": "^0.13.0"
+    "supertest": "^0.15.0"
   },
   "dependencies": {
-    "101": "^0.5.0",
+    "101": "^0.16.1",
     "dat-middleware": "^1.9.0",
     "i": "^0.3.2",
     "keypather": "^1.7.0"
