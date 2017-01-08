@@ -29,18 +29,18 @@
   "homepage": "https://github.com/tjmehta/mongooseware",
   "devDependencies": {
     "body-parser": "^1.4.3",
-    "code": "^1.4.0",
+    "code": "^4.0.0",
     "express": "^4.12.3",
     "jshint": "^2.7.0",
-    "lab": "^5.6.1",
-    "mongoose": "~3.8.24",
+    "lab": "^11.2.1",
+    "mongoose": "~4.7.6",
     "nodemon": "^1.2.0",
-    "supertest": "^0.15.0"
+    "supertest": "^2.0.1"
   },
   "dependencies": {
-    "101": "^0.16.1",
+    "101": "^1.6.2",
     "dat-middleware": "^1.9.0",
     "i": "^0.3.2",
-    "keypather": "^1.7.0"
+    "keypather": "^2.0.1"
   }
 }
